@@ -1,3 +1,4 @@
+![image](https://github.com/Mohammed-Musaraf/Git-Diff/assets/175245948/4a4b746d-3377-4440-862f-0b63fece6127)
 
 ```markdown
 # Git Differ
