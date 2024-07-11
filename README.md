@@ -15,6 +15,8 @@ Git Differ is a full-stack application that leverages the GitHub API to display 
 
 - Backend hosted on Render: [Git Differ Backend](https://git-diff.onrender.com)
 - Frontend hosted on Vercel: [Git Differ Frontend](https://git-diff-three.vercel.app/)
+- Use this link [Git Differ Home](https://git-diff-three.vercel.app/repositories/chakra-ui/chakra-ui/commit/d14435cc01ab8d8a120d34d4127920848733d9e6)
+- Please feel free to explore other repo https://git-diff-three.vercel.app/repositories/:owner/:repository/commit/:commitSHA
 
 ## Table of Contents
 
