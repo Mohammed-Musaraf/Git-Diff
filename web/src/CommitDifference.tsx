@@ -7,6 +7,7 @@ import {
   Box,
   Grid,
   GridItem,
+  Spinner,
   Text,
   useToast,
   VStack,
@@ -18,29 +19,50 @@ import { CommitDifferenceResponse } from "./types";
 
 const CommitDifference: React.FC<Partial<RouteDetails>> = (props) => {
   const [diff, setDiff] = useState<CommitDifferenceResponse[] | null>(null);
+  const [isLoading, setLoading] = useState<boolean>(true);
+
   const toast = useToast();
+
   useEffect(() => {
     const { commitSHA, owner, repository } = props;
     const serverUrl =
       import.meta.env.VITE_SERVER_URL ?? "http://localhost:3000";
     const url = `${serverUrl}/repositories/${owner}/${repository}/commits/${commitSHA}/diff`;
+    setLoading(true);
     fetch(url, {
       method: "GET",
     })
       .then((response) => response.json())
-      .then((data) => setDiff(data))
+      .then((data) => {
+        setDiff(data);
+        setLoading(false);
+      })
       .catch((error) => {
         console.error("Error fetching the diff:", error);
         toast({
           title: "Error fetching data",
-          description: "There was an error fetching the commit difference.",
+          description: "There was an error fetching the commit diff.",
           status: "error",
           duration: 5000,
           isClosable: true,
         });
+        setLoading(false);
       });
-  }, [toast]);
+  }, [props, toast]);
 
+  if (isLoading) {
+    return (
+      <VStack
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Spinner boxSize="30px" color="blue.500" />
+      </VStack>
+    );
+  }
   if (!diff) return null;
   return (
     <Accordion

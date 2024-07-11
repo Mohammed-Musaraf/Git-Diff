@@ -1,4 +1,11 @@
-import { HStack, Image, Text, useToast, VStack } from "@chakra-ui/react";
+import {
+  HStack,
+  Image,
+  Spinner,
+  Text,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { RouteDetails } from "./App";
 import { bodyTextStyle, headerTextStyle, textColor } from "./style";
@@ -6,28 +13,51 @@ import { CommitResponse } from "./types";
 
 const CommitHeader: React.FC<Partial<RouteDetails>> = (props) => {
   const [diffCommit, setDiffCommit] = useState<CommitResponse | null>(null);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const toast = useToast();
+
   useEffect(() => {
     const { commitSHA, owner, repository } = props;
     const serverUrl =
       import.meta.env.VITE_SERVER_URL ?? "http://localhost:3000";
-    const url = `${serverUrl}/repositories/${owner}/${repository}/commits/${commitSHA} `;
+    const url = `${serverUrl}/repositories/${owner}/${repository}/commits/${commitSHA}`;
+
+    setLoading(true); 
     fetch(url, {
       method: "GET",
     })
       .then((response) => response.json())
-      .then((data) => setDiffCommit(data))
+      .then((data) => {
+        setDiffCommit(data);
+        setLoading(false); 
+      })
       .catch((error) => {
-        console.error("Error fetching the diff:", error);
+        console.error("Error fetching the commit:", error);
         toast({
           title: "Error fetching data",
-          description: "There was an error fetching the commit diff.",
+          description: "There was an error fetching the commit.",
           status: "error",
           duration: 5000,
           isClosable: true,
         });
+        setLoading(false); 
       });
-  }, [toast]);
+  }, [props, toast]);
+
+  if (isLoading) {
+    return (
+      <VStack
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Spinner boxSize="30px" color="blue.500" />
+      </VStack>
+    );
+  }
+
   if (!diffCommit) return null;
   return (
     <HStack w="full">
