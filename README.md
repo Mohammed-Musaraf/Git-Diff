@@ -1,4 +1,3 @@
-Here's a detailed `README.md` for your project:
 
 ```markdown
 # Git Differ
@@ -113,4 +112,3 @@ Git Differ is a full-stack application that leverages the GitHub API to display 
 - **Frontend**: React, Chakra UI, Vite, TypeScript
 
 
-Feel free to customize it further based on your preferences and project details.
