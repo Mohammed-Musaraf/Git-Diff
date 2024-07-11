@@ -1,27 +1,50 @@
-import { Box, HStack, Image, Text, VStack } from "@chakra-ui/react";
-import {
-  bodyTextStyle,
-  headerTextStyle,
-  linkMonoSpaceStyle,
-  textColor,
-} from "./style";
+import { HStack, Image, Text, useToast, VStack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { RouteDetails } from "./App";
+import { bodyTextStyle, headerTextStyle, textColor } from "./style";
+import { CommitResponse } from "./types";
 
-const CommitHeader = () => {
+const CommitHeader: React.FC<Partial<RouteDetails>> = (props) => {
+  const [diffCommit, setDiffCommit] = useState<CommitResponse | null>(null);
+  const toast = useToast();
+  useEffect(() => {
+    const { commitSHA, owner, repository } = props;
+    const serverUrl =
+      import.meta.env.VITE_SERVER_URL ?? "http://localhost:3000";
+    const url = `${serverUrl}/repositories/${owner}/${repository}/commits/${commitSHA} `;
+    fetch(url, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => setDiffCommit(data))
+      .catch((error) => {
+        console.error("Error fetching the diff:", error);
+        toast({
+          title: "Error fetching data",
+          description: "There was an error fetching the commit diff.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      });
+  }, [toast]);
+  if (!diffCommit) return null;
   return (
-    <HStack>
+    <HStack w="full">
       <Image
-        src="https://bit.ly/dan-abramov"
+        src={diffCommit.author?.avatar_url}
         alt="Dan Abramov"
         boxSize="50px"
         borderRadius="full"
         alignSelf="flex-start"
       />
       <VStack alignItems="flex-start" alignSelf="flex-start" flex={0.6}>
-        <Text sx={headerTextStyle}>
-          Remove some wrappers from a previous abstraction (#14142)
-        </Text>
+        <Text sx={headerTextStyle}>{diffCommit.message}</Text>
         <Text sx={bodyTextStyle} color={textColor.muted}>
-          Authored by <span style={{ color: textColor.body }}>eseliger</span>{" "}
+          Authored by{" "}
+          <span style={{ color: textColor.body }}>
+            {diffCommit.author?.login}
+          </span>{" "}
           four days ago
         </Text>
         <Text sx={bodyTextStyle} color={textColor.body}>
@@ -29,9 +52,10 @@ const CommitHeader = () => {
           elit. Eget ipsum massa egestas id pellentesque volutpat maecenas amet.
         </Text>
       </VStack>
-      <VStack alignItems="flex-end" alignSelf="flex-end" flex={0.4}>
+      {/* <VStack alignItems="flex-end" alignSelf="flex-end" flex={0.4}>
         <Text sx={bodyTextStyle} color={textColor.muted}>
-          Commited by <span style={{ color: "#32405D" }}>renovate-bot</span>
+          Commited by{" "}
+          <span style={{ color: "#32405D" }}>{diffCommit.committer.login}</span>{" "}
           three days ago
         </Text>
         <Text sx={bodyTextStyle} color={textColor.muted}>
@@ -46,7 +70,7 @@ const CommitHeader = () => {
             ab003b92b05f0f517a5125a2bc78cda806329017
           </span>
         </Text>
-      </VStack>
+      </VStack> */}
     </HStack>
   );
 };

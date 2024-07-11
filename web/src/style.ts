@@ -1,7 +1,7 @@
 import { SystemStyleObject } from "@chakra-ui/react";
 
 export const bodyTextStyle: SystemStyleObject = {
-  fontStyle: "Arial",
+  fontStyle: "arial",
   fontWeight: "400",
   fontSize: "14px",
   lineHeight: "20px",
@@ -15,12 +15,14 @@ export const headerTextStyle: SystemStyleObject = {
 };
 
 export const monoSpaceStyle: SystemStyleObject = {
-  font: "Courier New,Bold",
+  fontFamily: "courier",
   fontSize: "12px",
+  fontWeight: "700",
+  color:"#6D84B0"
 };
 
 export const linkMonoSpaceStyle: SystemStyleObject = {
-  font: "Courier New,Bold",
+  font: "courier",
   fontSize: "13px",
 };
 

@@ -1,29 +1,24 @@
-import {
-  ChakraBaseProvider,
-  extendBaseTheme,
-  theme as chakraTheme,
-} from "@chakra-ui/react";
+import { ChakraBaseProvider, extendBaseTheme } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
-import { buttonSizes, buttonVariants } from "./theme";
+import ErrorPage from "./error-page";
 
-const { Button } = chakraTheme.components;
+const theme = extendBaseTheme({});
 
-const theme = extendBaseTheme({
-  components: {
-    Button: {
-      // ...Button,
-      variants: buttonVariants,
-      sizes: buttonSizes,
-    },
+const router = createBrowserRouter([
+  {
+    path: "/repositories/:owner/:repository/commit/:commitSHA",
+    element: <App />,
+    errorElement: <ErrorPage />,
   },
-});
+]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraBaseProvider theme={theme}>
-      <App />
+      <RouterProvider router={router} />
     </ChakraBaseProvider>
   </React.StrictMode>
 );

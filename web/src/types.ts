@@ -1,5 +1,16 @@
 import { components } from "@octokit/openapi-types/types";
 
+export interface DiffLine {
+  baseLineNumber: number | null;
+  headLineNumber: number | null;
+  content: string;
+}
+
+export interface DiffBlock {
+  header: string;
+  lines: DiffLine[];
+}
+
 export interface Commit {
   /**
    * Format: uri
@@ -65,17 +76,6 @@ export interface Commit {
     total?: number;
   };
   files?: components["schemas"]["diff-entry"][];
-}
-
-export interface DiffLine {
-  baseLineNumber: number | null;
-  headLineNumber: number | null;
-  content: string;
-}
-
-export interface DiffBlock {
-  header: string;
-  lines: DiffLine[];
 }
 
 export type CommitResponse = Pick<

@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "courier";
+  src: url("/web/public/fonts/Courier_Prime/CourierPrime-Regular.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "arial";
+  src: url("/web/public/fonts/arial/ARIAL.TTF") format("truetype");
+}
